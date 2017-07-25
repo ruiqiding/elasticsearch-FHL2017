@@ -10,7 +10,7 @@ PUT message
 }
 
 # Define mapping (schema)
-PUT message/_mapping
+PUT message/_mapping/message
 {
   "dynamic": "false",
   "properties": {
@@ -56,7 +56,7 @@ PUT message/_mapping
 }
 
 # Index to messages
-PUT message/123
+PUT message/message/123
 {
     "search_fields": {
         "searchable_text": "I love yammer Office365 MSFT",
@@ -75,7 +75,7 @@ PUT message/123
     }
 }
 
-PUT message/234
+PUT message/message/234
 {
     "search_fields": {
         "searchable_text": "MSFT is amazing",
@@ -95,7 +95,7 @@ PUT message/234
 }
 
 # Search for message
-GET message/_search
+GET message/message/_search
 {
   "query": { 
     "bool": { 

@@ -2,11 +2,12 @@ from datetime import datetime
 from elasticsearch import Elasticsearch
 es = Elasticsearch()
 
-doc = {
+# index a message
+message = {
     "search_fields": {
         "searchable_text": "Yammer is amazing",
         "access_data": {
-            "public_access": true
+            "public_access": True
         }
     },
     "model": {
@@ -20,16 +21,20 @@ doc = {
     }
 }
 
-res = es.index(index="message", doc_type='message', id=345, body=doc)
+res = es.index(index="message", doc_type='message', id=345, body=message)
 print(res['created'])
-
-res = es.get(index="message", doc_type='message', id=345)
-print(res['_source'])
 
 es.indices.refresh(index="message")
 
+# get the message
+res = es.get(index="message", doc_type='message', id=345)
+print(res['_source'])
+
+# search and display
+
 res = es.search(index="message", 
-  body={"query": { "match": { "search_fields.searchable.text": "Yammer" }}})
+  body={"query": { "match": { "search_fields.searchable_text": "Yammer" }}})
+
 print("Got %d Hits:" % res['hits']['total'])
 for hit in res['hits']['hits']:
-    print("%(model.id.id)s: %(search_fields.searchable_text)s" % hit["_source"])
+    print( hit["_source"]['model']['id'])

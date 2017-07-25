@@ -1,5 +1,9 @@
+# Use Postman or curl to run the following.
+# curl example:
+# curl -H "Content-Type: application/json" -X POST -d '{BODY}' http://localhost:9200/PATH
+
 # Create Index
-PUT message
+PUT http://localhost:9200/message
 {
     "settings" : {
         "index" : {
@@ -10,7 +14,7 @@ PUT message
 }
 
 # Define mapping (schema)
-PUT message/_mapping/message
+PUT http://localhost:9200/message/_mapping/message
 {
   "dynamic": "false",
   "properties": {
@@ -18,13 +22,12 @@ PUT message/_mapping/message
       "properties": {
         "searchable_text": {
             "type": "text"
-          }
         },
         "access_data": {
           "properties": {
             "public_access": {
               "type": "boolean"
-            },
+            }
           }
         }
       }
@@ -37,7 +40,7 @@ PUT message/_mapping/message
               "type": "long"
             },
             "type": {
-              "type": "string"
+              "type": "text"
             },
             "network": {
               "type": "long"
@@ -45,7 +48,7 @@ PUT message/_mapping/message
           }
         },
         "state": {
-          "type": "string"
+          "type": "text"
         },
         "timestamp": {
           "type": "long"
@@ -56,7 +59,7 @@ PUT message/_mapping/message
 }
 
 # Index to messages
-PUT message/message/123
+PUT http://localhost:9200/message/message/123
 {
     "search_fields": {
         "searchable_text": "I love yammer Office365 MSFT",
@@ -75,7 +78,7 @@ PUT message/message/123
     }
 }
 
-PUT message/message/234
+PUT http://localhost:9200/message/message/234
 {
     "search_fields": {
         "searchable_text": "MSFT is amazing",
@@ -95,16 +98,16 @@ PUT message/message/234
 }
 
 # Search for message
-GET message/message/_search
+POST http://localhost:9200/message/message/_search
 {
   "query": { 
     "bool": { 
       "must": [
-        { "match": { "search_fields.searchable.text": "MSFT" }},   
+        { "match": { "search_fields.searchable_text": "MSFT" }}
       ],
       "filter": [ 
-        { "term":  { "model.status": "ACTIVE" }}, 
-        { "term":  { "search_fields.access_data.public_access": "true" }}, 
+        { "term":  { "model.state": "active" }}, 
+        { "term":  { "search_fields.access_data.public_access": "true" }}
       ]
     }
   }

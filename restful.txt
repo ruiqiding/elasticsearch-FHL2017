@@ -1,6 +1,9 @@
-# Use Postman or curl to run the following.
+# Use curl or Postman to follow the steps in this document.
+#
 # curl example:
 # curl -H "Content-Type: application/json" -X POST -d '{BODY}' http://localhost:9200/PATH
+#
+# Postman - set body content-type as JSON(application/json)
 
 # Create Index
 PUT http://localhost:9200/message

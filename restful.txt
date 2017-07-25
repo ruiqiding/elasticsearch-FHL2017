@@ -1,0 +1,111 @@
+# Create Index
+PUT message
+{
+    "settings" : {
+        "index" : {
+            "number_of_shards" : 3, 
+            "number_of_replicas" : 1 
+        }
+    }
+}
+
+# Define mapping (schema)
+PUT message/_mapping
+{
+  "dynamic": "false",
+  "properties": {
+    "search_fields": {
+      "properties": {
+        "searchable_text": {
+            "type": "text"
+          }
+        },
+        "access_data": {
+          "properties": {
+            "public_access": {
+              "type": "boolean"
+            },
+          }
+        }
+      }
+    },
+    "model": {
+      "properties": {
+        "id": {
+          "properties": {
+            "id": {
+              "type": "long"
+            },
+            "type": {
+              "type": "string"
+            },
+            "network": {
+              "type": "long"
+            }
+          }
+        },
+        "state": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "long"
+        }
+      }
+    }
+  }
+}
+
+# Index to messages
+PUT message/123
+{
+    "search_fields": {
+        "searchable_text": "I love yammer Office365 MSFT",
+        "access_data": {
+            "public_access": true
+        }
+    },
+    "model": {
+        "id": {
+            "id": 123,
+            "type": "message",
+            "network": 127
+        },
+        "state": "ACTIVE",
+        "timestamp": 1501003003
+    }
+}
+
+PUT message/234
+{
+    "search_fields": {
+        "searchable_text": "MSFT is amazing",
+        "access_data": {
+            "public_access": false
+        }
+    },
+    "model": {
+        "id": {
+            "id": 234,
+            "type": "message",
+            "network": 117
+        },
+        "state": "ACTIVE",
+        "timestamp": 1501003001
+    }
+}
+
+# Search for message
+GET message/_search
+{
+  "query": { 
+    "bool": { 
+      "must": [
+        { "match": { "search_fields.searchable.text": "MSFT" }},   
+      ],
+      "filter": [ 
+        { "term":  { "model.status": "ACTIVE" }}, 
+        { "term":  { "search_fields.access_data.public_access": "true" }}, 
+      ]
+    }
+  }
+}

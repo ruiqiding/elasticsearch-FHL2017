@@ -1,4 +1,6 @@
-# elasticsearch-FHL2017
+# MSFT FHL2017: Let's Build a Simplified Yammer Search
+
+## We will create an index (table) for Yammer message, define index mapping (schema), add a few messages, and search for them. YAY!
 
 0. Install [Java](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
 1. Download [Elasticsearch](https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.1.zip)

@@ -5,7 +5,7 @@
 #
 # Postman - set body content-type as JSON(application/json)
 
-# Create Index
+# Create Index (== Database Table)
 PUT http://localhost:9200/message
 {
     "settings" : {
